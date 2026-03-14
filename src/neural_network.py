@@ -23,7 +23,7 @@ class NeuralNetwork:
                 scale = np.sqrt(1. / self.layer_dims[l-1])
 
             parameters[f'W{l}'] = np.random.randn(self.layer_dims[l], self.layer_dims[l-1]) * scale
-            parameters[f'b{l}'] = np.zeros(self.layer_dims[l], 1)
+            parameters[f'b{l}'] = np.zeros((self.layer_dims[l], 1))
 
         return parameters
 
@@ -67,6 +67,7 @@ class NeuralNetwork:
 
     def compute_loss(self, y_pred, y_true):
         m = y_true.shape[0]
+        y_true = y_true.T
         y_pred_clipped = np.clip(y_pred, 1e-8, 1 - 1e-8)
         cross_entropy = -np.sum(y_true * np.log(y_pred_clipped)) / m
 
@@ -89,8 +90,8 @@ class NeuralNetwork:
         for l in range(len(self.layer_dims) - 1, 0, -1):
             A_prev = self.cache[f'A{l - 1}']
 
-            if l > 1 and self.training and self.dropout_keep_prob < 1:
-                A_prev *= self.cache[f'D{l}'] / self.dropout_keep_prob
+            if l > 1 and l < len(self.layer_dims) - 1 and self.training and self.dropout_keep_prob < 1:
+                A_prev *= self.cache[f'D{l-1}'] / self.dropout_keep_prob
 
             gradients[f'dW{l}'] = np.dot(dZ, A_prev.T) / m
             gradients[f'db{l}'] = np.sum(dZ, axis=1, keepdims=True) / m
