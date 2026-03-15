@@ -1,3 +1,5 @@
+import numpy as np
+
 
 class DataAugmenter:
     """Data augmentation techniques for MNIST"""
