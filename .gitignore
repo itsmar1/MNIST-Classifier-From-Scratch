@@ -1,2 +1,6 @@
 # Ignore JetBrains IDE settings
 .idea/
+
+__pycache__/
+
+

@@ -71,6 +71,9 @@ def main():
     # Ensure models directory exists
     os.makedirs("models", exist_ok=True)
 
+    model.cache = {}
+    model.training = False
+
     # Save model
     with open('models/trained_model.pkl', 'wb') as f:
         pickle.dump(model, f)
